@@ -3,35 +3,51 @@ import React from 'react';
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg'
 
 import './styles.css';
+import api from '../../services/api';
 
-function TeacherItem() {
+export interface Teacher {
+    id: number;
+    avatar: string;
+    bio: string;
+    cost: number;
+    name: string;
+    subject: string;
+    whatsapp: string;
+}
+interface TeacherItemProps {
+    teacher: Teacher
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+
+    function createConnection() {
+        api.post('connections', {
+            user_id: teacher.id
+        })
+    }
+
     return (
         <article className="teacher-item">
-                    <header>
-                        <img src="https://media-exp1.licdn.com/dms/image/C5603AQGsx5RuH4bHoA/profile-displayphoto-shrink_100_100/0?e=1602115200&v=beta&t=Xpqco180HWVDMNff0D0LeugXtH2l31NOP0yvdxRxzSY" alt="Gabriel Ferreira" />
-                        <div>
-                            <strong>Gabriel Ferreira</strong>
-                            <span>Química</span>
-                        </div>
-                    </header>
+            <header>
+                <img src={teacher.avatar} alt={teacher.name} />
+                <div>
+                    <strong>{teacher.name}</strong>
+                    <span>{teacher.subject}</span>
+                </div>
+            </header>
 
-                    <p>
-                        LO ea EAE AE AeaE AE AsE AEs AE SAe SAEA E SAE AES saE aSE Ae SAEasE saE AE A
-                        
-                        ROAORAOROARO
-
-                    </p>
-                    <footer>
-                        <p>
-                            Preço/hora
-                            <strong>R$ 80,00</strong>
-                        </p>
-                        <button type="button">
-                            <img src={whatsappIcon} alt="Entrar em contacto"/>
-                            Entrar em contacto
-                        </button>
-                    </footer>
-                </article>
+            <p>{teacher.bio} </p>
+            <footer>
+                <p>
+                    Preço/hora
+                            <strong>€ {teacher.cost}</strong>
+                </p>
+                <a onClick={createConnection} href={`https://wa.me/${teacher.whatsapp}`} target="blank">
+                    <img src={whatsappIcon} alt="Whatsapp" />
+          Entrar em contato
+        </a>
+            </footer>
+        </article>
     );
 }
 
